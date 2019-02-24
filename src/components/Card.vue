@@ -57,12 +57,12 @@ export default class Card extends Vue {
   }
 
   beforeDestroy() {
-    (interact(this.$refs.interactElement) as any).unset();
+    interact(this.$refs.interactElement as any).unset();
   }
 
   mounted() {
     const element = this.$refs.interactElement;
-    interact(element).draggable({
+    interact(element as any).draggable({
       onstart: () => {
         this.isInteractAnimating = false;
       },
@@ -133,7 +133,7 @@ export default class Card extends Vue {
   }
 
   interactUnsetElement() {
-    (interact(this.$refs.interactElement) as any).unset();
+    interact(this.$refs.interactElement as any).unset();
     this.isInteractDragged = true;
   }
 }
