@@ -6,7 +6,6 @@
       :cards="visibleCards"
       @cardAccepted="handleCardAccepted"
       @cardRejected="handleCardRejected"
-      @cardSkipped="handleCardSkipped"
       @hideCard="removeCardFromDeck"
     />
     <div v-if="isGameOver">
@@ -40,6 +39,14 @@ export default class Home extends Vue {
   public visibleCards: object[] = getWordListWithArticles();
   public correctWords: string[] = [];
   public wrongWords: string[] = [];
+  private audioWrong: HTMLAudioElement;
+  private audioCorrect: HTMLAudioElement;
+
+  constructor() {
+    super();
+    this.audioWrong = new Audio(require('../assets/wrong.wav'));
+    this.audioCorrect = new Audio(require('../assets/correct.wav'));
+  }
 
   setScore(selectedArticle: string) {
     const { article, word, translation } = this.visibleCards[0] as IWord;
@@ -47,8 +54,10 @@ export default class Home extends Vue {
     const sentence = `${article} ${word} -> ${translation}`;
 
     if (score === 0) {
+      this.audioWrong.play();
       this.wrongWords.push(sentence);
     } else {
+      this.audioCorrect.play();
       this.correctWords.push(sentence);
     }
 
@@ -56,11 +65,11 @@ export default class Home extends Vue {
   }
 
   handleCardAccepted() {
-    this.setScore('de');
+    this.setScore('het');
   }
 
   handleCardRejected() {
-    this.setScore('het');
+    this.setScore('de');
   }
 
   removeCardFromDeck() {
