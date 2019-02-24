@@ -1,4 +1,4 @@
-# vuepollo-ql
+# De of Het
 
 ## Project setup
 ```

@@ -1,18 +1,82 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <h1>🤔 De of Het? 🤔</h1>
+    <CardStack
+      v-if="!isGameOver"
+      :cards="visibleCards"
+      @cardAccepted="handleCardAccepted"
+      @cardRejected="handleCardRejected"
+      @cardSkipped="handleCardSkipped"
+      @hideCard="removeCardFromDeck"
+    />
+    <div v-if="isGameOver">
+      Done! Your score: {{ score }}
+      <div>
+        <h2>Correct words</h2>
+        <div v-for="word in correctWords" :key="word">{{ word }}</div>
+      </div>
+      <div>
+        <h2>Wrong words</h2>
+        <div v-for="word in wrongWords" :key="word">{{ word }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { getWordListWithArticles } from '../constants';
+import CardStack from '@/components/CardStack.vue';
+import { IWord } from '@/types/word';
 
 @Component({
   components: {
-    HelloWorld,
+    CardStack,
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  public isGameOver = false;
+  public score = 0;
+  public visibleCards: object[] = getWordListWithArticles();
+  public correctWords: string[] = [];
+  public wrongWords: string[] = [];
+
+  setScore(selectedArticle: string) {
+    const { article, word, translation } = this.visibleCards[0] as IWord;
+    const score = article === selectedArticle ? 1 : 0;
+    const sentence = `${article} ${word} -> ${translation}`;
+
+    if (score === 0) {
+      this.wrongWords.push(sentence);
+    } else {
+      this.correctWords.push(sentence);
+    }
+
+    this.score += score;
+  }
+
+  handleCardAccepted() {
+    this.setScore('de');
+  }
+
+  handleCardRejected() {
+    this.setScore('het');
+  }
+
+  removeCardFromDeck() {
+    this.visibleCards.shift();
+    if (this.visibleCards.length <= 0) {
+      this.isGameOver = true;
+    }
+  }
+}
 </script>
+
+<style lang="scss">
+@import '../styles/mixins.scss';
+
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+</style>
