@@ -22,3 +22,14 @@ export const getArticle = async (word: string) => {
     return fallbackResult;
   }
 };
+
+const synth = window.speechSynthesis;
+
+export const speak = (word: string) => {
+  const voice = synth.getVoices().find((v: SpeechSynthesisVoice) => v.lang === 'nl-NL');
+  if (voice) {
+    const utterThis = new SpeechSynthesisUtterance(word);
+    utterThis.voice = voice;
+    synth.speak(utterThis);
+  }
+};

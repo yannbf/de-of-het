@@ -27,6 +27,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { getWordListWithArticles } from '../constants';
 import CardStack from '@/components/CardStack.vue';
 import { IWord } from '@/types/word';
+import { speak } from '@/utils';
 
 @Component({
   components: {
@@ -46,6 +47,10 @@ export default class Home extends Vue {
     super();
     this.audioWrong = new Audio(require('../assets/wrong.wav'));
     this.audioCorrect = new Audio(require('../assets/correct.wav'));
+  }
+
+  mounted() {
+    this.speakAloud();
   }
 
   setScore(selectedArticle: string) {
@@ -76,7 +81,18 @@ export default class Home extends Vue {
     this.visibleCards.shift();
     if (this.visibleCards.length <= 0) {
       this.isGameOver = true;
+    } else {
+      this.speakAloud();
     }
+  }
+
+  speakAloud() {
+    // give a small delay to speak the word
+    setTimeout(() => speak(this.firstCard.word), 300);
+  }
+
+  get firstCard(): IWord {
+    return this.visibleCards[0] as IWord;
   }
 }
 </script>
