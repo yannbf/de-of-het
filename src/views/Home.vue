@@ -2,22 +2,31 @@
   <div class="home">
     <h1>🤔 De of Het? 🤔</h1>
     <CardStack
-      v-if="!isGameOver"
+      v-if="isRunning && !isGameOver"
       :cards="visibleCards"
       @cardAccepted="handleCardAccepted"
       @cardRejected="handleCardRejected"
       @hideCard="removeCardFromDeck"
     />
     <div v-if="isGameOver">
-      Done! Your score: {{ score }}
+      <h2 class="final-score">Done! Your score: {{ score }}</h2>
       <div>
         <h2>Correct words</h2>
         <div v-for="word in correctWords" :key="word">{{ word }}</div>
       </div>
-      <div>
+      <div v-if="wrongWords">
         <h2>Wrong words</h2>
         <div v-for="word in wrongWords" :key="word">{{ word }}</div>
       </div>
+    </div>
+    <section v-if="!isRunning && !isGameOver">
+      <p>Welcome to De of Het!</p>
+      <p>Swipe the cards to the left if you think the word's article is <i>De</i>, or to the right if you think it is <i>Het.</i></p>
+      <p>Good luck!</p>
+    </section>
+    <div v-if="!isRunning" @click="startGame()">
+      <button class="bubbly-button" v-if="!isGameOver">Start game!</button>
+      <button class="bubbly-button" v-if="isGameOver">Try again!</button>
     </div>
   </div>
 </template>
@@ -36,21 +45,29 @@ import { speak } from '@/utils';
 })
 export default class Home extends Vue {
   public isGameOver = false;
+  public isRunning = false;
   public score = 0;
-  public visibleCards: object[] = getWordListWithArticles();
+  public visibleCards: object[] = [];
   public correctWords: string[] = [];
   public wrongWords: string[] = [];
+
   private audioWrong: HTMLAudioElement;
   private audioCorrect: HTMLAudioElement;
+
+  startGame() {
+    this.visibleCards = getWordListWithArticles();
+    this.isRunning = true;
+    this.isGameOver = false;
+    this.correctWords = [];
+    this.wrongWords = [];
+    this.score = 0;
+    this.speakAloud();
+  }
 
   constructor() {
     super();
     this.audioWrong = new Audio(require('../assets/wrong.wav'));
     this.audioCorrect = new Audio(require('../assets/correct.wav'));
-  }
-
-  mounted() {
-    this.speakAloud();
   }
 
   setScore(selectedArticle: string) {
@@ -80,10 +97,15 @@ export default class Home extends Vue {
   removeCardFromDeck() {
     this.visibleCards.shift();
     if (this.visibleCards.length <= 0) {
-      this.isGameOver = true;
+      this.stopGame();
     } else {
       this.speakAloud();
     }
+  }
+
+  stopGame() {
+    this.isGameOver = true;
+    this.isRunning = false;
   }
 
   speakAloud() {
@@ -101,7 +123,22 @@ export default class Home extends Vue {
 @import '../styles/mixins.scss';
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   text-align: center;
+}
+
+section {
+  margin: 0 1rem;
+  padding: 1rem;
+  border: 1px solid white;
+  max-width: 500px;
+
+  @media only screen and (min-width: 768px) {
+    margin: 0 auto;
+    padding: 1rem;
+  }
+}
+
+.final-score {
+  color: #ffdc00;
 }
 </style>
