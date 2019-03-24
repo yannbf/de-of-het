@@ -28,6 +28,7 @@
       <button class="bubbly-button" v-if="!isGameOver">Start game!</button>
       <button class="bubbly-button" v-if="isGameOver">Try again!</button>
     </div>
+    {{words}}
   </div>
 </template>
 
@@ -37,6 +38,7 @@ import { getWordListWithArticles } from '../constants';
 import CardStack from '@/components/CardStack.vue';
 import { IWord } from '@/types/word';
 import { speak } from '@/utils';
+import { State } from 'vuex-class';
 
 @Component({
   components: {
@@ -47,21 +49,26 @@ export default class Home extends Vue {
   public isGameOver = false;
   public isRunning = false;
   public score = 0;
-  public visibleCards: object[] = [];
+  // public visibleCards: object[] = [];
   public correctWords: string[] = [];
   public wrongWords: string[] = [];
+  @State('words') visibleCards: any;
 
   private audioWrong: HTMLAudioElement;
   private audioCorrect: HTMLAudioElement;
 
   startGame() {
-    this.visibleCards = getWordListWithArticles();
+    // this.visibleCards = getWordListWithArticles();
     this.isRunning = true;
     this.isGameOver = false;
     this.correctWords = [];
     this.wrongWords = [];
     this.score = 0;
     this.speakAloud();
+  }
+
+  mounted() {
+    // console.log(this.words);
   }
 
   constructor() {
@@ -71,9 +78,9 @@ export default class Home extends Vue {
   }
 
   setScore(selectedArticle: string) {
-    const { article, word, translation } = this.visibleCards[0] as IWord;
+    const { article, name, translation } = this.visibleCards[0] as IWord;
     const score = article === selectedArticle ? 1 : 0;
-    const sentence = `${article} ${word} -> ${translation}`;
+    const sentence = `${article} ${name} -> ${translation}`;
 
     if (score === 0) {
       this.audioWrong.play();
@@ -110,7 +117,7 @@ export default class Home extends Vue {
 
   speakAloud() {
     // give a small delay to speak the word
-    setTimeout(() => speak(this.firstCard.word), 300);
+    setTimeout(() => speak(this.firstCard.name), 300);
   }
 
   get firstCard(): IWord {

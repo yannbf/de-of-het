@@ -1,5 +1,5 @@
 export interface IWord {
-  word: string;
+  name: string;
   translation: string;
   chapter: number;
   article?: string;

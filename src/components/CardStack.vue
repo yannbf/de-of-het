@@ -4,7 +4,7 @@
     <div class="cards">
       <Card
         v-for="(card, index) in cards"
-        :key="card.word"
+        :key="card.name"
         :card="card"
         :is-current="index === 0"
         @cardAccepted="$emit('cardAccepted')"

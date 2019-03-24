@@ -6,10 +6,14 @@
     :class="{
       isAnimating: isInteractAnimating,
       isCurrent: isCurrent,
+      withImage: card.image != undefined
     }"
-    :style="{ transform: transformString }"
+    :style="{
+      transform: transformString,
+      'background-image': card.image ? 'url(' + card.image + ')' : ''
+    }"
   >
-    <h3 class="cardTitle">{{ card.word }}</h3>
+    <h3 class="cardTitle">{{ card.name }}</h3>
     <h3 v-if="showStuff">{{ card.article }}</h3>
   </div>
 </template>
@@ -149,9 +153,20 @@ $cardsPositionOffset: 55vh * 0.06;
 $cardsScaleOffset: 0.08;
 $defaultTranslation: $cardsPositionOffset * $cardsTotal;
 $defaultScale: 1 - ($cardsScaleOffset * $cardsTotal);
-$fs-card-title: 1.125em;
+$fs-card-title: 2em;
 
 .card {
+  &.withImage::after {
+    content: "";
+    display: block;
+    position: fixed;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 15px !important;
+    bottom: 0 !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+  }
+
   @include card();
   @include absolute(0);
   @include sizing(100% 80vw);
@@ -199,6 +214,8 @@ $fs-card-title: 1.125em;
 .cardTitle {
   margin: 0 0 15px;
   font-size: $fs-card-title;
+  position: relative;
+  z-index: 2;
 }
 
 @for $i from 1 through $cardsTotal {
