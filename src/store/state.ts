@@ -1,5 +1,4 @@
 import { IState } from '@/types';
-import { getWordListWithArticles } from '@/constants';
 
 const state: IState = {
   game: {
@@ -7,9 +6,7 @@ const state: IState = {
     isRunning: true,
     score: 0
   },
-  words: getWordListWithArticles()
+  words: []
 };
 
-export default {
-  state
-};
+export default state;

@@ -2,79 +2,68 @@
   <div class="home">
     <h1>🤔 De of Het? 🤔</h1>
     <CardStack
-      v-if="isRunning && !isGameOver"
+      v-if="game.isRunning && !game.isOver"
       :cards="visibleCards"
-      @cardAccepted="handleCardAccepted"
-      @cardRejected="handleCardRejected"
+      @swipeRight="handleSwipeRight"
+      @swipeLeft="handleSwipeLeft"
       @hideCard="removeCardFromDeck"
     />
-    <div v-if="isGameOver">
-      <h2 class="final-score">Done! Your score: {{ score }}</h2>
+    <div v-if="game.isOver">
+      <h2 class="final-score">Done! Your score: {{ game.score }}</h2>
       <div>
         <h2>Correct words</h2>
-        <div v-for="word in correctWords" :key="word">{{ word }}</div>
+        <div v-for="word in game.correctWords" :key="word">{{ word }}</div>
       </div>
-      <div v-if="wrongWords">
+      <div v-if="game.wrongWords">
         <h2>Wrong words</h2>
-        <div v-for="word in wrongWords" :key="word">{{ word }}</div>
+        <div v-for="word in game.wrongWords" :key="word">{{ word }}</div>
       </div>
     </div>
-    <section v-if="!isRunning && !isGameOver">
+    <section v-if="!game.isRunning && !game.isOver">
       <p>Welcome to De of Het!</p>
       <p>Swipe the cards to the left if you think the word's article is <i>De</i>, or to the right if you think it is <i>Het.</i></p>
       <p>Good luck!</p>
     </section>
-    <div v-if="!isRunning" @click="startGame()">
-      <button class="bubbly-button" v-if="!isGameOver">Start game!</button>
-      <button class="bubbly-button" v-if="isGameOver">Try again!</button>
+    <div v-if="!game.isRunning" @click="startGame()">
+      <button class="bubbly-button" v-if="!game.isOver">Start game!</button>
+      <button class="bubbly-button" v-if="game.isOver">Try again!</button>
     </div>
-    {{words}}
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { getWordListWithArticles } from '../constants';
+import { State } from 'vuex-class';
+
+import { getWordListWithArticles } from '@/constants';
 import CardStack from '@/components/CardStack.vue';
 import { IWord } from '@/types/word';
-import { speak } from '@/utils';
-import { State } from 'vuex-class';
+import { speakerService, audioService, Audios } from '@/services';
+import wordsModule from '@/store/modules/words';
+import gameModule from '@/store/modules/game';
 
 @Component({
   components: {
     CardStack,
   },
+  // filters: {
+  //   visibleCards(cards: IWord[]) {
+  //     return cards.filter(card => card.article === 'het');
+  //   }
+  // }
 })
 export default class Home extends Vue {
-  public isGameOver = false;
-  public isRunning = false;
-  public score = 0;
-  // public visibleCards: object[] = [];
-  public correctWords: string[] = [];
-  public wrongWords: string[] = [];
-  @State('words') visibleCards: any;
-
-  private audioWrong: HTMLAudioElement;
-  private audioCorrect: HTMLAudioElement;
+  @State(({words}) => words.data) visibleCards: any;
+  @State('game') game: any;
 
   startGame() {
-    // this.visibleCards = getWordListWithArticles();
-    this.isRunning = true;
-    this.isGameOver = false;
-    this.correctWords = [];
-    this.wrongWords = [];
-    this.score = 0;
+    wordsModule.fetchAll();
+    gameModule.start();
     this.speakAloud();
-  }
-
-  mounted() {
-    // console.log(this.words);
   }
 
   constructor() {
     super();
-    this.audioWrong = new Audio(require('../assets/wrong.wav'));
-    this.audioCorrect = new Audio(require('../assets/correct.wav'));
   }
 
   setScore(selectedArticle: string) {
@@ -83,21 +72,21 @@ export default class Home extends Vue {
     const sentence = `${article} ${name} -> ${translation}`;
 
     if (score === 0) {
-      this.audioWrong.play();
-      this.wrongWords.push(sentence);
+      audioService.play(Audios.Wrong);
+      this.game.wrongWords.push(sentence);
     } else {
-      this.audioCorrect.play();
-      this.correctWords.push(sentence);
+      audioService.play(Audios.Correct);
+      this.game.correctWords.push(sentence);
     }
 
-    this.score += score;
+    this.game.score += score;
   }
 
-  handleCardAccepted() {
+  handleSwipeRight() {
     this.setScore('het');
   }
 
-  handleCardRejected() {
+  handleSwipeLeft() {
     this.setScore('de');
   }
 
@@ -111,13 +100,12 @@ export default class Home extends Vue {
   }
 
   stopGame() {
-    this.isGameOver = true;
-    this.isRunning = false;
+    gameModule.stop();
   }
 
   speakAloud() {
     // give a small delay to speak the word
-    setTimeout(() => speak(this.firstCard.name), 300);
+    setTimeout(() => speakerService.speak(this.firstCard.name), 300);
   }
 
   get firstCard(): IWord {

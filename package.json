@@ -20,7 +20,8 @@
     "vue-property-decorator": "^7.0.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.0",
-    "vuex-class": "^0.3.1"
+    "vuex-class": "^0.3.1",
+    "vuex-module-decorators": "^0.9.8"
   },
   "devDependencies": {
     "@interactjs/types": "^1.4.0-alpha.32",

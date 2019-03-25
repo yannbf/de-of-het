@@ -28,9 +28,9 @@ const interactMaxRotation = 15;
 const interactOutOfSightXCoordinate = 500;
 const interactOutOfSightYCoordinate = 600;
 enum CardActions {
-  ACCEPT_CARD = 'cardAccepted',
-  REJECT_CARD = 'cardRejected',
-  SKIP_CARD = 'cardSkipped',
+  SWIPE_RIGHT = 'swipeRight',
+  SWIPE_LEFT = 'swipeLeft',
+  SWIPE_DOWN = 'swipeDown',
 }
 
 @Component
@@ -85,9 +85,9 @@ export default class Card extends Vue {
         const { x, y } = this.interactPosition;
         this.isInteractAnimating = true;
 
-        if (x > interactXThreshold) this.playCard(CardActions.ACCEPT_CARD);
-        else if (x < -interactXThreshold) this.playCard(CardActions.REJECT_CARD);
-        else if (y > interactYThreshold) this.playCard(CardActions.SKIP_CARD);
+        if (x > interactXThreshold) this.playCard(CardActions.SWIPE_RIGHT);
+        else if (x < -interactXThreshold) this.playCard(CardActions.SWIPE_LEFT);
+        else if (y > interactYThreshold) this.playCard(CardActions.SWIPE_DOWN);
         else this.resetCardPosition();
       },
     });
@@ -106,23 +106,23 @@ export default class Card extends Vue {
     this.interactUnsetElement();
 
     switch (interaction) {
-      case CardActions.ACCEPT_CARD:
+      case CardActions.SWIPE_RIGHT:
         this.interactSetPosition({
           x: interactOutOfSightXCoordinate,
         });
-        this.$emit(CardActions.ACCEPT_CARD);
+        this.$emit(CardActions.SWIPE_RIGHT);
         break;
-      case CardActions.REJECT_CARD:
+      case CardActions.SWIPE_LEFT:
         this.interactSetPosition({
           x: -interactOutOfSightXCoordinate,
         });
-        this.$emit(CardActions.REJECT_CARD);
+        this.$emit(CardActions.SWIPE_LEFT);
         break;
-      case CardActions.SKIP_CARD:
+      case CardActions.SWIPE_DOWN:
         this.interactSetPosition({
           y: interactOutOfSightYCoordinate,
         });
-        this.$emit(CardActions.SKIP_CARD);
+        this.$emit(CardActions.SWIPE_DOWN);
         break;
     }
 

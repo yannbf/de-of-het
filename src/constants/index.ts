@@ -1,5 +1,5 @@
-import { wordList } from './data/words';
-import { IWord } from './types/word';
+import { wordList } from '../data/words';
+import { IWord } from '../types/word';
 
 export const getWordList = () => wordList;
 

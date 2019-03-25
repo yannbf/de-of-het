@@ -7,9 +7,9 @@
         :key="card.name"
         :card="card"
         :is-current="index === 0"
-        @cardAccepted="$emit('cardAccepted')"
-        @cardRejected="$emit('cardRejected')"
-        @cardSkipped="$emit('cardSkipped')"
+        @swipeRight="$emit('swipeRight')"
+        @swipeLeft="$emit('swipeLeft')"
+        @swipeDown="$emit('swipeDown')"
         @hideCard="$emit('hideCard')"
       />
     </div>
