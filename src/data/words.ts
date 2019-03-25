@@ -185,7 +185,7 @@ export const wordList = [
     translation: 'percent',
     chapter: 1,
     article: 'het',
-    image: 'http://pngimg.com/uploads/percent/percent_PNG17.png'
+    image: 'https://image.freepik.com/free-vector/businessman-carrying-huge-percent-sign_1133-348.jpg'
   },
   {
     name: 'sparen',

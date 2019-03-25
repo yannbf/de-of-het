@@ -34,6 +34,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { State } from 'vuex-class';
+import debounce from 'lodash.debounce';
 
 import { getWordListWithArticles } from '@/constants';
 import CardStack from '@/components/CardStack.vue';
@@ -64,6 +65,23 @@ export default class Home extends Vue {
 
   constructor() {
     super();
+  }
+
+  mounted() {
+    addEventListener('keyup', debounce(this.listenToKeyboard, 100, { leading: true }));
+  }
+
+  private listenToKeyboard(event: KeyboardEvent) {
+    if (!this.game.isRunning) {
+      if (event.defaultPrevented) {
+          return;
+      }
+      const key = event.key || event.keyCode;
+
+      if (key === 'Enter' || key === ' ') {
+        this.startGame();
+      }
+    }
   }
 
   setScore(selectedArticle: string) {

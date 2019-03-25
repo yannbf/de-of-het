@@ -1,6 +1,6 @@
 <template>
   <div class="card-container">
-    <!-- <h2 class="cards-article">HET</h2> -->
+    <h2 class="cards-article">DE</h2>
     <div class="cards">
       <Card
         v-for="(card, index) in cards"
@@ -13,7 +13,7 @@
         @hideCard="$emit('hideCard')"
       />
     </div>
-    <!-- <h2 class="cards-article">DE</h2> -->
+    <h2 class="cards-article">HET</h2>
   </div>
 </template>
 
@@ -35,10 +35,15 @@ export default class CardStack extends Vue {
 .card-container {
   display: flex;
   height: 40vh;
+  min-width: 16rem;
+  max-width: 25rem;
+  margin-right: auto;
+  margin-left: auto;
 }
 .cards-article {
   align-self: center;
-  margin: 2rem;
+  margin: 1rem;
+  color: #ff9d97;
 }
 .cards {
   margin: 0 auto;

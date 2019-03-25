@@ -14,13 +14,13 @@
     }"
   >
     <h3 class="cardTitle">{{ card.name }}</h3>
-    <h3 v-if="showStuff">{{ card.article }}</h3>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import interact from 'interactjs';
+import debounce from 'lodash.debounce';
 
 const interactYThreshold = 150;
 const interactXThreshold = 100;
@@ -35,7 +35,6 @@ enum CardActions {
 
 @Component
 export default class Card extends Vue {
-  public showStuff = false;
   @Prop() public card: object | undefined;
   @Prop() private isCurrent: boolean | undefined;
   interactPosition: any;
@@ -51,6 +50,7 @@ export default class Card extends Vue {
       rotation: 0,
     };
   }
+
   get transformString() {
     if (!this.isInteractAnimating || this.isInteractDragged) {
       const { x, y, rotation } = this.interactPosition;
@@ -65,6 +65,26 @@ export default class Card extends Vue {
   }
 
   mounted() {
+    addEventListener('keyup', debounce(this.listenToKeyboard, 100, { leading: true }));
+    this.setCardInteraction();
+  }
+
+  private listenToKeyboard(event: KeyboardEvent) {
+    if (this.isCurrent) {
+      if (event.defaultPrevented) {
+          return;
+      }
+      const key = event.key || event.keyCode;
+
+      if (key === 'ArrowRight') {
+        this.playCard(CardActions.SWIPE_RIGHT);
+      } else if (key === 'ArrowLeft') {
+        this.playCard(CardActions.SWIPE_LEFT);
+      }
+    }
+  }
+
+  private setCardInteraction() {
     const element = this.$refs.interactElement;
     interact(element as any).draggable({
       onstart: () => {
@@ -93,18 +113,17 @@ export default class Card extends Vue {
     });
   }
 
-  interactSetPosition(coordinates: any) {
+  private interactSetPosition(coordinates: any) {
     const { x = 0, y = 0, rotation = 0 } = coordinates;
     this.interactPosition = { x, y, rotation };
   }
 
-  resetCardPosition() {
+  private resetCardPosition() {
     this.interactSetPosition({ x: 0, y: 0, rotation: 0 });
   }
 
-  playCard(interaction: any) {
+  private playCard(interaction: any) {
     this.interactUnsetElement();
-
     switch (interaction) {
       case CardActions.SWIPE_RIGHT:
         this.interactSetPosition({
@@ -129,16 +148,18 @@ export default class Card extends Vue {
     this.hideCard();
   }
 
+  private interactUnsetElement() {
+    if (this.$refs.interactElement) {
+      interact(this.$refs.interactElement as any).unset();
+      this.isInteractDragged = true;
+    }
+  }
+
   hideCard() {
     setTimeout(() => {
       this.isShowing = false;
       this.$emit('hideCard', this.card);
     }, 200);
-  }
-
-  interactUnsetElement() {
-    interact(this.$refs.interactElement as any).unset();
-    this.isInteractDragged = true;
   }
 }
 </script>
@@ -164,7 +185,8 @@ $fs-card-title: 2em;
     height: 100% !important;
     border-radius: 15px !important;
     bottom: 0 !important;
-    background-color: rgba(0, 0, 0, 0.3) !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-size: cover;
   }
 
   @include card();
