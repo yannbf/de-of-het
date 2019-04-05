@@ -3,4 +3,6 @@ export interface IWord {
   translation: string;
   chapter: number;
   article?: string;
+  score?: number;
+  sentence?: string;
 }

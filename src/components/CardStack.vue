@@ -7,10 +7,10 @@
         :key="card.name"
         :card="card"
         :is-current="index === 0"
-        @swipeRight="$emit('swipeRight')"
-        @swipeLeft="$emit('swipeLeft')"
-        @swipeDown="$emit('swipeDown')"
-        @hideCard="$emit('hideCard')"
+        @swipeRight="$emit('swipeRight', card)"
+        @swipeLeft="$emit('swipeLeft', card)"
+        @swipeDown="$emit('swipeDown', card)"
+        @hideCard="$emit('hideCard', card)"
       />
     </div>
     <h2 class="cards-article">HET</h2>
