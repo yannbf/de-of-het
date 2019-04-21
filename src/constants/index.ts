@@ -3,8 +3,8 @@ import { IWord } from '../types/word';
 
 export const getWordList = () => wordList;
 
-export const getWordListWithArticles = (chapter: number = 1, quantity: number = 15) => {
-  chapter = Math.floor(Math.random() * 5);
+export const getWordListWithArticles = (chapter: number = 1, quantity: number = 8) => {
+  chapter = Math.floor(Math.random() * 5) + 1;
   return getShuffledArr(
     wordList.filter((word: IWord) => {
       return word.article && word.chapter === chapter;

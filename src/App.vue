@@ -1,12 +1,63 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav"
+         :style="{ visibility: game.isRunning ? 'hidden' : 'visible' }">
       <router-link to="/">Home</router-link> |
+      <router-link to="/leaderboard">Leaderboard</router-link> |
       <router-link to="/about">About</router-link>
     </div>
     <router-view />
+    {{$store.state.palavras}}
+    <ProgressBar :words="$store.state.palavras" :v-if="game.isRunning"></ProgressBar>
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import { State } from 'vuex-class';
+
+import ProgressBar from '@/components/ProgressBar.vue';
+
+@Component({
+  components: {
+    ProgressBar
+  },
+})
+export default class Home extends Vue {
+  @State('game') game: any;
+  @State('words') words: any;
+
+  async presentAlertPrompt() {
+    const alert = await this.$ionic.alertController.create({
+      header: `Your score was ...!<br/>What's your name?'`,
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          placeholder: 'Awesome player'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: (data) => {
+            console.log('Confirm Ok', data);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+}
+</script>
 
 <style lang="scss">
 @import 'styles';

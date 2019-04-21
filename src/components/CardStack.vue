@@ -9,7 +9,6 @@
         :is-current="index === 0"
         @swipeRight="$emit('swipeRight', card)"
         @swipeLeft="$emit('swipeLeft', card)"
-        @swipeDown="$emit('swipeDown', card)"
         @hideCard="$emit('hideCard', card)"
       />
     </div>
@@ -25,6 +24,11 @@ import Card from '@/components/Card.vue';
   components: {
     Card,
   },
+  filters: {
+    visible(cards: any) {
+      return cards;//.filter((card: any) => card.visible);
+    }
+  }
 })
 export default class CardStack extends Vue {
   @Prop() public cards?: Card[];

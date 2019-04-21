@@ -11,16 +11,14 @@ class GameModule extends VuexModule {
   private isOver = false;
   private isRunning = false;
   private score = 0;
-  private correctWords: string[] = [];
-  private wrongWords: string[] = [];
+  private level: number = 1;
 
   @Mutation
-  start() {
+  start(level = 1) {
+    this.level = level;
     this.isOver = false;
     this.isRunning = true;
     this.score = 0;
-    this.correctWords = [];
-    this.wrongWords = [];
   }
 
   @Mutation
