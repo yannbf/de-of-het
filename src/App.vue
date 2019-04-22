@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <div id="nav"
-         :style="{ visibility: game.isRunning ? 'hidden' : 'visible' }">
+         :style="{ visibility: $store.state.game.isRunning ? 'hidden' : 'visible' }">
       <router-link to="/">Home</router-link> |
       <router-link to="/leaderboard">Leaderboard</router-link> |
       <router-link to="/about">About</router-link>
     </div>
-    <router-view />
-    <ProgressBar :words="$store.state.words" :v-if="game.isRunning"></ProgressBar>
+    <router-view :game="$store.state.game" :words="$store.state.words"/>
+    <ProgressBar :words="$store.state.words" :v-if="$store.state.game.isRunning"></ProgressBar>
   </div>
 </template>
 
@@ -23,9 +23,6 @@ import ProgressBar from '@/components/ProgressBar.vue';
   },
 })
 export default class Home extends Vue {
-  @State('game') game: any;
-  @State('words') words: any;
-
   async presentAlertPrompt() {
     const alert = await this.$ionic.alertController.create({
       header: `Your score was ...!<br/>What's your name?'`,
