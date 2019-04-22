@@ -11,20 +11,20 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { IWord } from '../types/word';
+import { IWord } from '../types';
 import { State } from 'vuex-class';
 
 @Component
 export default class ProgressBar extends Vue {
-  @Prop() private words: [] | undefined;
+  @Prop() private words: any;
 
   constructor() {
     super();
   }
 
   getClassName(word: IWord) {
-    if (word.score) {
-      return word.score > 0 ? 'correct' : 'wrong';
+    if (word.score !== undefined) {
+      return word.score === 1 ? 'correct' : 'wrong';
     }
   }
 }

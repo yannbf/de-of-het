@@ -32,13 +32,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 import debounce from 'lodash.debounce';
 
 import { getWordListWithArticles } from '@/constants';
 import CardStack from '@/components/CardStack.vue';
-import { IWord } from '@/types/word';
+import { IWord } from '@/types';
 import { speakerService, audioService, Audios } from '@/services';
 import gameModule from '@/store/modules/game';
 import { store } from '../store';
@@ -49,7 +49,8 @@ import { store } from '../store';
   }
 })
 export default class Home extends Vue {
-  @State('game') game: any;
+  @Prop() private game: any;
+  @Prop() private words: any;
 
   get visibleCards() {
     return this.$store.getters.visibleWords;
@@ -57,7 +58,7 @@ export default class Home extends Vue {
 
   startGame() {
     // wordsModule.fetchAll();
-    gameModule.start();
+    this.$store.dispatch('startGame', 1); // can be further improved to use mapHelpers
     this.speakAloud();
     // this.presentAlertPrompt();
   }
@@ -85,17 +86,16 @@ export default class Home extends Vue {
 
   setScore(selectedArticle: string, word: IWord) {
     const { article, name, translation } = word;
-    const score = article === selectedArticle ? 1 : -1;
+    const point = article === selectedArticle ? 1 : 0;
     const sentence = `${article} ${name} -> ${translation}`;
 
-    if (score === -1) {
+    if (point === 0) {
       audioService.play(Audios.Wrong);
     } else {
       audioService.play(Audios.Correct);
     }
-    word.sentence = sentence;
-    store.commit('setScore', {word: word.name, score });
-    this.game.score += score;
+    word.sentence = sentence; // Remove this mutation and add to the state mutations
+    this.$store.dispatch('setScore', {word: word.name, point });
   }
 
   handleSwipeRight(word: IWord) {
@@ -115,7 +115,7 @@ export default class Home extends Vue {
   }
 
   stopGame() {
-    gameModule.stop();
+    this.$store.dispatch('stopGame');
   }
 
   speakAloud() {
@@ -128,8 +128,8 @@ export default class Home extends Vue {
   }
 
   filterWords(correct: boolean) {
-    return this.$store.state.words.filter(
-      (word: IWord) => word.score === (correct ? 1 : -1)
+    return this.words.filter(
+      (word: IWord) => word.score === (correct ? 1 : 0)
     );
   }
 }
