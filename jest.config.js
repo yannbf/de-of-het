@@ -12,9 +12,10 @@ module.exports = {
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
     '^.+\\.tsx?$': 'ts-jest'
   },
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
-  },
+  moduleNameMapper: [
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^lodash-es$': '<rootDir>/node_modules/lodash/index.js'
+  ],
   snapshotSerializers: [
     'jest-serializer-vue'
   ],

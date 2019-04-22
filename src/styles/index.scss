@@ -61,7 +61,7 @@ $baby-blue: #f8faff;
   &:after{
     display: none;
     bottom: -75%;
-    background-image:  
+    background-image:
     radial-gradient(circle, $button-bg 20%, transparent 20%), 
     radial-gradient(circle, $button-bg 20%, transparent 20%),
     radial-gradient(circle,  transparent 10%, $button-bg 15%, transparent 20%),
@@ -69,10 +69,10 @@ $baby-blue: #f8faff;
     radial-gradient(circle, $button-bg 20%, transparent 20%),
     radial-gradient(circle, $button-bg 20%, transparent 20%),
     radial-gradient(circle, $button-bg 20%, transparent 20%);
-  background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
-  //background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
+    background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+    // background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
   }
- 
+
   &:active{
     transform: scale(0.9);
     background-color: darken($button-bg, 5%);

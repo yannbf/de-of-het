@@ -9,7 +9,6 @@
         :is-current="index === 0"
         @swipeRight="$emit('swipeRight', card)"
         @swipeLeft="$emit('swipeLeft', card)"
-        @swipeDown="$emit('swipeDown', card)"
         @hideCard="$emit('hideCard', card)"
       />
     </div>

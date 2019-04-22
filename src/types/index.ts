@@ -1,9 +1,5 @@
-export * from './word';
-export * from './state';
+export * from './word.interface';
+export * from './state.interface';
+export * from './game.interface';
 
-export interface IGameState {
-  isRunning: boolean;
-  isOver: boolean;
-  score: number;
-  username?: string;
-}
+

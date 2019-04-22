@@ -670,6 +670,18 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
+"@ionic/core@^4.0.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.2.0.tgz#9b71c4b22a6b58cfe1bd3b1e24142b462ed9b480"
+  dependencies:
+    ionicons "4.5.5"
+
+"@ionic/vue@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@ionic/vue/-/vue-0.0.4.tgz#9a4c90eab26cf82746f81f612a32688f6a5f6094"
+  dependencies:
+    "@ionic/core" "^4.0.0"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -730,9 +742,9 @@
   version "3.3.6"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.3.6.tgz#5932ead926307ca21e5b36808257f7c926b06565"
 
-"@types/lodash.debounce@^4.0.6":
-  version "4.0.6"
-  resolved "https://registry.yarnpkg.com/@types/lodash.debounce/-/lodash.debounce-4.0.6.tgz#c5a2326cd3efc46566c47e4c0aa248dc0ee57d60"
+"@types/lodash-es@^4.17.3":
+  version "4.17.3"
+  resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.3.tgz#87eb0b3673b076b8ee655f1890260a136af09a2d"
   dependencies:
     "@types/lodash" "*"
 
@@ -4260,6 +4272,10 @@ invert-kv@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
 
+ionicons@4.5.5:
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-4.5.5.tgz#b059958a54dd45cfa127acc0baf11503b8671e51"
+
 ip-regex@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-2.1.0.tgz#fa78bf5d2e6913c911ce9f819ee5146bb6d844e9"
@@ -5282,13 +5298,13 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
+lodash-es@^4.17.11:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.11.tgz#145ab4a7ac5c5e52a3531fb4f310255a152b4be0"
+
 lodash._reinterpolate@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
-
-lodash.debounce@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
 lodash.defaultsdeep@^4.6.0:
   version "4.6.0"
@@ -8279,6 +8295,10 @@ vue-loader@^15.6.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-progressbar@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vue-progressbar/-/vue-progressbar-0.7.5.tgz#414730892252b1e45582d4979dec93038e007f79"
+
 vue-property-decorator@^7.0.0:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-7.3.0.tgz#d50d67f0b0f1c814f9f2fba36d6eeccbcc62dbb6"
@@ -8314,10 +8334,6 @@ vue@^2.5.22:
 vuex-class@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/vuex-class/-/vuex-class-0.3.1.tgz#3c0b946bcff4cf2be1904de5b0cab1a3dd5c41d5"
-
-vuex-module-decorators@^0.9.8:
-  version "0.9.8"
-  resolved "https://registry.yarnpkg.com/vuex-module-decorators/-/vuex-module-decorators-0.9.8.tgz#760c63fc5358fb2f3170a5428181a4549adc91ce"
 
 vuex@^3.1.0:
   version "3.1.0"

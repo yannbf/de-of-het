@@ -20,7 +20,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import interact from 'interactjs';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash-es';
 
 const interactYThreshold = 150;
 const interactXThreshold = 100;
@@ -75,7 +75,6 @@ export default class Card extends Vue {
           return;
       }
       const key = event.key || event.keyCode;
-
       if (key === 'ArrowRight') {
         this.playCard(CardActions.SWIPE_RIGHT);
       } else if (key === 'ArrowLeft') {
@@ -156,10 +155,11 @@ export default class Card extends Vue {
   }
 
   hideCard() {
-    setTimeout(() => {
-      this.isShowing = false;
-      this.$emit('hideCard', this.card);
-    }, 200);
+    this.$emit('hideCard', this.card);
+    // setTimeout(() => {
+    //   this.isShowing = false;
+    //   this.$emit('hideCard', this.card);
+    // }, 250);
   }
 }
 </script>
