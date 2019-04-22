@@ -14,7 +14,7 @@
         <h2>Correct words</h2>
         <div v-for="word in filterWords(true)" :key="word.sentence">{{ word.sentence }}</div>
       </div>
-      <div v-if="game.wrongWords">
+      <div>
         <h2>Wrong words</h2>
         <div v-for="word in filterWords(false)" :key="word.sentence">{{ word.sentence }}</div>
       </div>
@@ -34,13 +34,12 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash-es';
 
 import { getWordListWithArticles } from '@/constants';
 import CardStack from '@/components/CardStack.vue';
 import { IWord } from '@/types';
 import { speakerService, audioService, Audios } from '@/services';
-import gameModule from '@/store/modules/game';
 import { store } from '../store';
 
 @Component({
@@ -84,7 +83,7 @@ export default class Home extends Vue {
     }
   }
 
-  setScore(selectedArticle: string, word: IWord) {
+  setPoint(selectedArticle: string, word: IWord) {
     const { article, name, translation } = word;
     const point = article === selectedArticle ? 1 : 0;
     const sentence = `${article} ${name} -> ${translation}`;
@@ -95,15 +94,15 @@ export default class Home extends Vue {
       audioService.play(Audios.Correct);
     }
     word.sentence = sentence; // Remove this mutation and add to the state mutations
-    this.$store.dispatch('setScore', {word: word.name, point });
+    this.$store.dispatch('setPoint', { name, point });
   }
 
   handleSwipeRight(word: IWord) {
-    this.setScore('het', word);
+    this.setPoint('het', word);
   }
 
   handleSwipeLeft(word: IWord) {
-    this.setScore('de', word);
+    this.setPoint('de', word);
   }
 
   removeCardFromDeck() {
@@ -129,7 +128,7 @@ export default class Home extends Vue {
 
   filterWords(correct: boolean) {
     return this.words.filter(
-      (word: IWord) => word.score === (correct ? 1 : 0)
+      (word: IWord) => word.point === (correct ? 1 : 0)
     );
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="leaderboard">
-    <h1>Yay you won :D</h1>
+    <h1>To be developed.</h1>
   </div>
 </template>
 

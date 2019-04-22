@@ -23,8 +23,8 @@ export default class ProgressBar extends Vue {
   }
 
   getClassName(word: IWord) {
-    if (word.score !== undefined) {
-      return word.score === 1 ? 'correct' : 'wrong';
+    if (word.point !== undefined) {
+      return word.point === 1 ? 'correct' : 'wrong';
     }
   }
 }

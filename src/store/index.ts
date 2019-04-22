@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { IWord } from '../types/word.interface';
+import { find } from 'lodash-es';
+
 import { getWordListWithArticles } from '../constants/index';
 import { IState } from '@/types';
 
@@ -15,28 +16,25 @@ export const store = new Vuex.Store({
       username: '',
       level: 0
     },
-    words: getWordListWithArticles()
+    words: []
   },
   getters: {
     visibleWords: (state) => {
-      return state.words.filter((w: any) => w.score === undefined);
+      return state.words.filter((w: any) => w.point === undefined);
     }
   },
   mutations: {
-    setScore(state: IState, payload: {word: string, point: number}) {
-      const index = state.words.findIndex((w: IWord) => w.name === payload.word);
-      if (index !== undefined) { // Is this necessary?
-        state.words = [
-          ...state.words.slice(0, index),
-          {
-            ...state.words[index],
-            score: payload.point
-          },
-          ...state.words.slice(index + 1)
-        ];
-        // This action/mutation should be renamed to something else, and setScore should be associated with the game.score prop
+    setWords(state: IState, payload: {words: any[]}) {
+      state.words = payload.words.map((word: any) => ({...word, point: undefined, sentence: ''}));
+    },
+    setPoint({words, game}: IState, payload: {name: string, point: number}) {
+      const { name, point } = payload;
+      const word = find(words, {name});
+      if (word) {
+        word.point = point;
       }
-      state.game.score += payload.point;
+
+      game.score += point;
     },
     startGame(state: IState, payload: number) {
       state.game.level = payload;
@@ -50,13 +48,19 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    setScore(_, {word, point}: any) {
-      this.commit('setScore', {word, point});
+    setPoint(_, {name, point}: any) {
+      this.commit('setPoint', {name, point});
     },
-    resetWords() {
-      this.commit('setWordsListWithArticles', getWordListWithArticles());
+    async fetchWords() {
+      try {
+        const words = await getWordListWithArticles();
+        this.commit('setWords', {words});
+      } catch (ex) {
+        console.log('could not fetch data for wordList');
+      }
     },
-    startGame(_, level) {
+    async startGame(_, level) {
+      await this.dispatch('fetchWords');
       this.commit('startGame', level);
     },
     stopGame(_) {
