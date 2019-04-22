@@ -7,33 +7,27 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    palavras: getWordListWithArticles()
+    words: getWordListWithArticles()
+  },
+  getters: {
+    visibleWords: (state) => {
+      return state.words.filter((w: any) => w.score === undefined);
+    }
   },
   mutations: {
-    setScore({palavras}: any, payload: {word: string, score: number}) {
-      const index = palavras.findIndex((w: IWord) => w.name === payload.word);
+    setScore({words}: any, payload: {word: string, score: number}) {
+      const index = words.findIndex((w: IWord) => w.name === payload.word);
       if (index !== undefined) {
-        Vue.set(palavras, index, {...palavras[index], score: payload.score });
+        Vue.set(words, index, {...words[index], score: payload.score });
       }
-
-      // palavras[index] = {...palavras[index], score: payload.score};
-      // state.palavras = [
-      //   ...state.palavras.slice(0, selectedWord),
-      //   {
-      //     ...state.palavras[selectedWord],
-      //     score: 1
-      //   },
-      //   ...state.palavras.slice(selectedWord)
-      // ];
-      // state.palavras = []
-      // state.palavras = [
-      //   { ...state.palavras[selectedWord] }
-      // ];
     }
   },
   actions: {
     setScore({word, score}: any) {
       return {word, score};
+    },
+    resetWords() {
+      return getWordListWithArticles();
     }
   },
 });

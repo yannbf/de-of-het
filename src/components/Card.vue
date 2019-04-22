@@ -65,14 +65,14 @@ export default class Card extends Vue {
   }
 
   mounted() {
-    addEventListener('keyup', debounce(this.listenToKeyboard, 100, { leading: true }));
+    addEventListener('keyup', debounce(this.listenToKeyboard, 300, { leading: true }));
     this.setCardInteraction();
   }
 
   private listenToKeyboard(event: KeyboardEvent) {
     if (this.isCurrent) {
       if (event.defaultPrevented) {
-          return;
+        return;
       }
       const key = event.key || event.keyCode;
 
@@ -156,10 +156,11 @@ export default class Card extends Vue {
   }
 
   hideCard() {
-    setTimeout(() => {
-      this.isShowing = false;
-      this.$emit('hideCard', this.card);
-    }, 200);
+    this.$emit('hideCard', this.card);
+    // setTimeout(() => {
+    //   this.isShowing = false;
+    //   this.$emit('hideCard', this.card);
+    // }, 250);
   }
 }
 </script>

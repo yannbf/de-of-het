@@ -7,8 +7,7 @@
       <router-link to="/about">About</router-link>
     </div>
     <router-view />
-    {{$store.state.palavras}}
-    <ProgressBar :words="$store.state.palavras" :v-if="game.isRunning"></ProgressBar>
+    <ProgressBar :words="$store.state.words" :v-if="game.isRunning"></ProgressBar>
   </div>
 </template>
 

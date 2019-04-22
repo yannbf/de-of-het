@@ -16,38 +16,14 @@ import { State } from 'vuex-class';
 
 @Component
 export default class ProgressBar extends Vue {
-  scores: any[] = []; // add interface
   @Prop() private words: [] | undefined;
 
   constructor() {
     super();
   }
 
-  mounted() {
-    console.log(this.words);
-  }
-
-  beforeUpdate() {
-    console.log('beforeUpdate');
-  }
-
-  updated() {
-    console.log('beforeUpdate');
-  }
-
-  getLevelInfo() {
-    let size = 0;
-    // switch(this.level) {
-    //   case 1: size = 7;
-    //   case 2: size = 15;
-    // }
-
-    return Array(size).fill({}).map((e) => ({ status: undefined }))
-  }
-
   getClassName(word: IWord) {
-    console.log('bnananek')
-    if(word.score) {
+    if (word.score) {
       return word.score > 0 ? 'correct' : 'wrong';
     }
   }
@@ -75,6 +51,7 @@ export default class ProgressBar extends Vue {
     display: block;
     background: rgba(255, 255, 255, .1);
     min-width: 0;
+    transition: background .2s linear;
 
     &.correct {
       background: #47d99a;

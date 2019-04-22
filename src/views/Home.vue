@@ -3,7 +3,7 @@
     <h1>🤔 De of Het? 🤔</h1>
     <CardStack
       v-if="game.isRunning && !game.isOver"
-      :cards="$store.state.palavras"
+      :cards="visibleCards"
       @swipeRight="handleSwipeRight"
       @swipeLeft="handleSwipeLeft"
       @hideCard="removeCardFromDeck"
@@ -40,32 +40,25 @@ import { getWordListWithArticles } from '@/constants';
 import CardStack from '@/components/CardStack.vue';
 import { IWord } from '@/types/word';
 import { speakerService, audioService, Audios } from '@/services';
-import wordsModule from '@/store/modules/words';
 import gameModule from '@/store/modules/game';
 import { store } from '../store';
 
 @Component({
   components: {
     CardStack,
-  },
-  filters: {
-    visible(cards: IWord[]) {
-      const carden = cards.filter((card: IWord) => !card.score);
-      console.log(carden.length);
-      return carden;
-    },
   }
 })
 export default class Home extends Vue {
   @State('game') game: any;
-  // @State(({words}) => words.data) visibleCards: any;
-  result: IWord[] = [];
+
+  get visibleCards() {
+    return this.$store.getters.visibleWords;
+  }
 
   startGame() {
     // wordsModule.fetchAll();
     gameModule.start();
-    this.result = [];
-    // this.speakAloud();
+    this.speakAloud();
     // this.presentAlertPrompt();
   }
 
@@ -96,15 +89,13 @@ export default class Home extends Vue {
     const sentence = `${article} ${name} -> ${translation}`;
 
     if (score === -1) {
-      // audioService.play(Audios.Wrong);
+      audioService.play(Audios.Wrong);
     } else {
-      // audioService.play(Audios.Correct);
+      audioService.play(Audios.Correct);
     }
     word.sentence = sentence;
-    // word.score = score;
-    // wordsModule.SetScore({word: word.name, score: 1});
-    store.commit('setScore', {word: word.name, score: 1});
-    // this.game.score += score;
+    store.commit('setScore', {word: word.name, score });
+    this.game.score += score;
   }
 
   handleSwipeRight(word: IWord) {
@@ -116,12 +107,11 @@ export default class Home extends Vue {
   }
 
   removeCardFromDeck() {
-    // this.result.push(this.visibleCards.shift());
-    // if (this.visibleCards.length <= 0) {
-    //   this.stopGame();
-    // } else {
-    //   // this.speakAloud();
-    // }
+    if (this.visibleCards.length <= 0) {
+      this.stopGame();
+    } else {
+      this.speakAloud();
+    }
   }
 
   stopGame() {
@@ -134,12 +124,11 @@ export default class Home extends Vue {
   }
 
   get firstCard(): any {
-    return {};
-    // return this.visibleCards[0] as IWord;
+    return this.visibleCards[0] as IWord;
   }
 
   filterWords(correct: boolean) {
-    return this.result.filter(
+    return this.$store.state.words.filter(
       (word: IWord) => word.score === (correct ? 1 : -1)
     );
   }
