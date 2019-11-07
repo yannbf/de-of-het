@@ -21,6 +21,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import interact from 'interactjs';
 import { debounce } from 'lodash-es';
+import { IWord } from '../types';
 
 const interactYThreshold = 150;
 const interactXThreshold = 100;
@@ -35,7 +36,7 @@ enum CardActions {
 
 @Component
 export default class Card extends Vue {
-  @Prop() public card: object | undefined;
+  @Prop() public card: IWord | undefined;
   @Prop() private isCurrent: boolean | undefined;
   interactPosition: any;
   isInteractAnimating = true;
@@ -65,21 +66,27 @@ export default class Card extends Vue {
   }
 
   mounted() {
-    addEventListener('keyup', debounce(this.listenToKeyboard, 100, { leading: true }));
+    if (this.card && this.card.active) {
+      addEventListener('keyup', debounce(this.listenToKeyboard, 100, { leading: true }));
+    }
     this.setCardInteraction();
   }
 
+  updated() {
+    if (this.card && this.card.active) {
+      addEventListener('keyup', debounce(this.listenToKeyboard, 100, { leading: true }));
+    }
+  }
+
   private listenToKeyboard(event: KeyboardEvent) {
-    if (this.isCurrent) {
-      if (event.defaultPrevented) {
-          return;
-      }
-      const key = event.key || event.keyCode;
-      if (key === 'ArrowRight') {
-        this.playCard(CardActions.SWIPE_RIGHT);
-      } else if (key === 'ArrowLeft') {
-        this.playCard(CardActions.SWIPE_LEFT);
-      }
+    if (event.defaultPrevented) {
+        return;
+    }
+    const key = event.key || event.keyCode;
+    if (key === 'ArrowRight') {
+      this.playCard(CardActions.SWIPE_RIGHT);
+    } else if (key === 'ArrowLeft') {
+      this.playCard(CardActions.SWIPE_LEFT);
     }
   }
 

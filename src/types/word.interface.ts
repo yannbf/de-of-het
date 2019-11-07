@@ -5,4 +5,5 @@ export interface IWord {
   article?: string;
   point: number;
   sentence: string;
+  active: boolean;
 }

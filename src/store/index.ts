@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { find } from 'lodash-es';
+import { find, findIndex } from 'lodash-es';
 
 import { getWordListWithArticles } from '../constants/index';
-import { IState } from '@/types';
+import { IState } from '../types';
 
 Vue.use(Vuex);
 
@@ -25,7 +25,7 @@ export const store = new Vuex.Store({
   },
   mutations: {
     setWords(state: IState, payload: {words: any[]}) {
-      state.words = payload.words.map((word: any) => ({...word, point: undefined, sentence: ''}));
+      state.words = payload.words.map((word: any, index: number) => ({...word, point: undefined, sentence: '', active: index === 0}));
     },
     setPoint({words, game}: IState, payload: {name: string, point: number}) {
       const { name, point } = payload;
@@ -33,8 +33,14 @@ export const store = new Vuex.Store({
       if (word) {
         word.point = point;
       }
-
       game.score += point;
+    },
+    updateActiveCard(state: IState) {
+      const activeCardIndex = state.words.findIndex((word) => word.active === true);
+      state.words[activeCardIndex].active = false;
+      if (state.words[activeCardIndex + 1]) {
+        state.words[activeCardIndex + 1].active = true;
+      }
     },
     startGame(state: IState, payload: number) {
       state.game.level = payload;
@@ -50,6 +56,10 @@ export const store = new Vuex.Store({
   actions: {
     setPoint(_, {name, point}: any) {
       this.commit('setPoint', {name, point});
+      this.commit('updateActiveCard');
+    },
+    updateActiveCard(_, { index }: any) {
+      this.commit('updateActiveCard', index);
     },
     async fetchWords() {
       try {
