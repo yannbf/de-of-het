@@ -21,7 +21,11 @@
     </div>
     <section v-if="!game.isRunning && !game.isOver">
       <p>Welcome to De of Het!</p>
-      <p>Swipe the cards to the left if you think the word's article is <i>De</i>, or to the right if you think it is <i>Het.</i></p>
+      <p>
+        Swipe the cards to the left if you think the word's article is
+        <i>De</i>, or to the right if you think it is
+        <i>Het.</i>
+      </p>
       <p>Good luck!</p>
     </section>
     <div v-if="!game.isRunning" @click="startGame()">
@@ -40,24 +44,23 @@ import { getWordListWithArticles } from '@/constants';
 import CardStack from '@/components/CardStack.vue';
 import { IWord } from '@/types';
 import { speakerService, audioService, Audios } from '@/services';
-import { store } from '../store';
+import store from '../store';
 
 @Component({
   components: {
     CardStack,
-  }
+  },
 })
 export default class Home extends Vue {
   @Prop() private game: any;
-  @Prop() private words: any;
 
   get visibleCards() {
-    return this.$store.getters.visibleWords;
+    return this.$store.getters['game/visibleWords'];
   }
 
   startGame() {
     // wordsModule.fetchAll();
-    this.$store.dispatch('startGame', 1); // can be further improved to use mapHelpers
+    this.$store.dispatch('game/startGame', 1); // can be further improved to use mapHelpers
     this.speakAloud();
     // this.presentAlertPrompt();
   }
@@ -73,7 +76,7 @@ export default class Home extends Vue {
   private listenToKeyboard(event: KeyboardEvent) {
     if (!this.game.isRunning) {
       if (event.defaultPrevented) {
-          return;
+        return;
       }
       const key = event.key || event.keyCode;
 
@@ -94,7 +97,7 @@ export default class Home extends Vue {
       audioService.play(Audios.Correct);
     }
     word.sentence = sentence; // Remove this mutation and add to the state mutations
-    this.$store.dispatch('setPoint', { name, point });
+    this.$store.dispatch('game/setPoint', { name, point });
   }
 
   handleSwipeRight(word: IWord) {
@@ -114,7 +117,7 @@ export default class Home extends Vue {
   }
 
   stopGame() {
-    this.$store.dispatch('stopGame');
+    this.$store.dispatch('game/stopGame');
   }
 
   speakAloud() {
@@ -127,9 +130,7 @@ export default class Home extends Vue {
   }
 
   filterWords(correct: boolean) {
-    return this.words.filter(
-      (word: IWord) => word.point === (correct ? 1 : 0)
-    );
+    return this.game.words.filter((word: IWord) => word.point === (correct ? 1 : 0));
   }
 }
 </script>

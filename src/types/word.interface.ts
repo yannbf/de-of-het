@@ -3,7 +3,7 @@ export interface IWord {
   translation: string;
   chapter: number;
   article?: string;
-  point: number;
+  point?: number;
   sentence: string;
   active: boolean;
 }
