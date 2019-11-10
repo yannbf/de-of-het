@@ -5,7 +5,7 @@
       <router-link to="/leaderboard">Leaderboard</router-link>|
       <router-link to="/about">About</router-link>
     </div>
-    <router-view :game="gameState" :words="gameState.words" />
+    <router-view :game="gameState" />
     <ProgressBar :words="gameState.words" :v-if="gameState.isRunning"></ProgressBar>
   </div>
 </template>
