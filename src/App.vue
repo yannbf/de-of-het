@@ -1,13 +1,12 @@
 <template>
   <div id="app">
-    <div id="nav"
-         :style="{ visibility: $store.state.game.isRunning ? 'hidden' : 'visible' }">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/leaderboard">Leaderboard</router-link> |
+    <div id="nav" :style="{ visibility: gameState.isRunning ? 'hidden' : 'visible' }">
+      <router-link to="/">Home</router-link>|
+      <router-link to="/leaderboard">Leaderboard</router-link>|
       <router-link to="/about">About</router-link>
     </div>
-    <router-view :game="$store.state.game" :words="$store.state.words"/>
-    <ProgressBar :words="$store.state.words" :v-if="$store.state.game.isRunning"></ProgressBar>
+    <router-view :game="gameState" />
+    <ProgressBar :words="gameState.words" :v-if="gameState.isRunning"></ProgressBar>
   </div>
 </template>
 
@@ -19,10 +18,14 @@ import ProgressBar from '@/components/ProgressBar.vue';
 
 @Component({
   components: {
-    ProgressBar
+    ProgressBar,
   },
 })
 export default class Home extends Vue {
+  get gameState() {
+    return this.$store.state.game;
+  }
+
   async presentAlertPrompt() {
     const alert = await this.$ionic.alertController.create({
       header: `Your score was ...!<br/>What's your name?'`,
@@ -30,8 +33,8 @@ export default class Home extends Vue {
         {
           name: 'name',
           type: 'text',
-          placeholder: 'Awesome player'
-        }
+          placeholder: 'Awesome player',
+        },
       ],
       buttons: [
         {
@@ -40,14 +43,15 @@ export default class Home extends Vue {
           cssClass: 'secondary',
           handler: () => {
             console.log('Confirm Cancel');
-          }
-        }, {
+          },
+        },
+        {
           text: 'Ok',
           handler: (data) => {
             console.log('Confirm Ok', data);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
