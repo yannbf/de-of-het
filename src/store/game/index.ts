@@ -10,7 +10,8 @@ export const state: IGameState = {
     score: 0,
     username: '',
     level: 0,
-    words: []
+    words: [],
+    debug: undefined
 };
 
 const namespaced: boolean = true;

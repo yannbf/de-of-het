@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <DebugInfo></DebugInfo>
     <div id="nav" :style="{ visibility: gameState.isRunning ? 'hidden' : 'visible' }">
       <router-link to="/">Home</router-link>|
       <router-link to="/leaderboard">Leaderboard</router-link>|
@@ -15,10 +16,12 @@ import { Component, Vue } from 'vue-property-decorator';
 import { State } from 'vuex-class';
 
 import ProgressBar from '@/components/ProgressBar.vue';
+import DebugInfo from '@/components/DebugInfo.vue';
 
 @Component({
   components: {
     ProgressBar,
+    DebugInfo,
   },
 })
 export default class Home extends Vue {

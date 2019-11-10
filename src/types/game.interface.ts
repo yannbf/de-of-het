@@ -7,4 +7,5 @@ export interface IGameState {
   username?: string;
   level: number;
   words: IWord[];
+  debug?: string;
 }

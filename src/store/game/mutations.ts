@@ -39,4 +39,7 @@ export const mutations: MutationTree<IGameState> = {
       nextCard.active = true;
     }
   },
+  updateDebugInfo(state: IGameState, payload: string) {
+    state.debug = payload;
+  }
 };
