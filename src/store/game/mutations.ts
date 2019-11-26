@@ -21,13 +21,15 @@ export const mutations: MutationTree<IGameState> = {
       active: index === 0
     }));
   },
-  setPoint({words}: IGameState, payload: {name: string, point: number}) {
+  setPoint(game: IGameState, payload: {name: string, point: number}) {
     const { name, point } = payload;
-    const word = find(words, {name}) as IWord;
+    const word = find(game.words, {name}) as IWord;
     if (word) {
       word.point = point;
+      game.score += point;
+    } else {
+      console.error(`Error when trying to set point. Word '${name}' not found.`)
     }
-    // game.score += point;
   },
   updateActiveCard(state: IGameState) {
     const activeCardIndex = state.words.findIndex((word) => word.active === true);
