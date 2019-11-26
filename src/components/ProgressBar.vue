@@ -4,8 +4,8 @@
       v-for="(word, index) in words"
       :key="index"
       class="score"
-      :class="getClassName(word)">
-    </div>
+      :class="getClassName(word)"
+    ></div>
   </div>
 </template>
 
@@ -47,11 +47,11 @@ export default class ProgressBar extends Vue {
     height: 10px;
     border-radius: 1rem;
     width: auto;
-    margin: 0 .1rem;
+    margin: 0 0.1rem;
     display: block;
-    background: rgba(255, 255, 255, .1);
+    background: rgba(255, 255, 255, 0.1);
     min-width: 0;
-    transition: background .2s linear;
+    transition: background 0.2s linear;
 
     &.correct {
       background: #47d99a;

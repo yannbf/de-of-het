@@ -6,7 +6,7 @@ class DebugInfo {
   update(data: any) {
     console.log(`updating info from ${this.data} to ${data}`);
     this.data = data;
-    
+
     store.commit('game/updateDebugInfo', null);
     Vue.nextTick(() => {
       store.commit('game/updateDebugInfo', this.data);

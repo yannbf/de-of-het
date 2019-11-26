@@ -7,8 +7,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-@Component({
-})
+@Component({})
 export default class Leaderboard extends Vue {
   async presentAlertPrompt() {
     const alert = await this.$ionic.alertController.create({
@@ -17,8 +16,8 @@ export default class Leaderboard extends Vue {
         {
           name: 'name',
           type: 'text',
-          placeholder: 'Awesome player'
-        }
+          placeholder: 'Awesome player',
+        },
       ],
       buttons: [
         {
@@ -27,14 +26,15 @@ export default class Leaderboard extends Vue {
           cssClass: 'secondary',
           handler: () => {
             console.log('Confirm Cancel');
-          }
-        }, {
+          },
+        },
+        {
           text: 'Ok',
           handler: (data) => {
             console.log('Confirm Ok', data);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();

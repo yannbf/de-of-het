@@ -13,22 +13,22 @@ export const mutations: MutationTree<IGameState> = {
     state.isOver = true;
     state.isRunning = false;
   },
-  setWords(state: IGameState, payload: {words: IWord[]}) {
+  setWords(state: IGameState, payload: { words: IWord[] }) {
     state.words = payload.words.map((word: IWord, index: number) => ({
       ...word,
       point: undefined,
       sentence: '',
-      active: index === 0
+      active: index === 0,
     }));
   },
-  setPoint(game: IGameState, payload: {name: string, point: number}) {
+  setPoint(game: IGameState, payload: { name: string; point: number }) {
     const { name, point } = payload;
-    const word = find(game.words, {name}) as IWord;
+    const word = find(game.words, { name }) as IWord;
     if (word) {
       word.point = point;
       game.score += point;
     } else {
-      console.error(`Error when trying to set point. Word '${name}' not found.`)
+      console.error(`Error when trying to set point. Word '${name}' not found.`);
     }
   },
   updateActiveCard(state: IGameState) {
@@ -43,5 +43,5 @@ export const mutations: MutationTree<IGameState> = {
   },
   updateDebugInfo(state: IGameState, payload: string) {
     state.debug = payload;
-  }
+  },
 };

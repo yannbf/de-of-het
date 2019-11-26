@@ -6,11 +6,11 @@
     :class="{
       isAnimating: isInteractAnimating,
       isCurrent: isCurrent,
-      withImage: card.image != undefined
+      withImage: card.image != undefined,
     }"
     :style="{
       transform: transformString,
-      'background-image': card.image ? 'url(' + card.image + ')' : ''
+      'background-image': card.image ? 'url(' + card.image + ')' : '',
     }"
   >
     <h3 class="cardTitle">{{ card.name }}</h3>
@@ -80,7 +80,7 @@ export default class Card extends Vue {
 
   private listenToKeyboard(event: KeyboardEvent) {
     if (event.defaultPrevented) {
-        return;
+      return;
     }
     const key = event.key || event.keyCode;
     if (key === 'ArrowRight') {
@@ -185,7 +185,7 @@ $fs-card-title: 2em;
 
 .card {
   &.withImage::after {
-    content: "";
+    content: '';
     display: block;
     position: fixed;
     width: 100% !important;

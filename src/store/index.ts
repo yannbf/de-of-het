@@ -7,7 +7,7 @@ Vue.use(Vuex);
 const store: StoreOptions<IState> = {
   modules: {
     game,
-  }
+  },
 };
 
 export default new Vuex.Store<IState>(store);

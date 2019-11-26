@@ -5,7 +5,7 @@ import { getWordListWithArticles } from '@/constants';
 const baseURL = 'https://myapiwhoknows/api';
 
 export const leaderboardAPI = axios.create({
-  baseURL
+  baseURL,
 });
 
 export const getWords = async (): Promise<IWord[]> => {
